@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
 function initPage() {
+    //Set the Element variables in order to interact with html
     const inputElement = document.getElementById("cityInputElement");
     const searchElement = document.getElementById("searchButton");
     const clearElement = document.getElementById("clearHistory");
@@ -11,13 +12,15 @@ function initPage() {
     const currentWindEl = document.getElementById("windSpeed");
     const currentUVElement = document.getElementById("uvIndex");
     const historyElement = document.getElementById("history");
+
+    //Get local storage where previoous searches have been saved.
     let searchHistory = JSON.parse(localStorage.getItem("search")) || [];
     
+    // Define API Key to use in ajax queries
     const APIKey = "f9b52cd0a6923dc341ec2b06a4eb3371";
-//  When search button is clicked, read the city name typed by the user
 
     function getWeather(cityName) {
-//  Using saved city name, execute a current condition get request from open weather map api
+//  Using saved city name, execute a current condition GET request from open weather map api
         let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
         $.ajax({
             url: queryURL,
@@ -33,10 +36,11 @@ function initPage() {
             let weatherPic = response.weather[0].icon;
             currentPicElement.setAttribute("src","https://openweathermap.org/img/wn/" + weatherPic + "@2x.png");
             currentPicElement.setAttribute("alt",response.weather[0].description);
-            currentTempEl.innerHTML = "Temperature: " + convertKelvin(response.main.temp) + " &#176F";
+            currentTempEl.innerHTML = "Temperature: " + convertKelvin(response.main.temp) + " \xB0F";
             currentHumidityEl.innerHTML = "Humidity: " + response.main.humidity + "%";
             currentWindEl.innerHTML = "Wind Speed: " + response.wind.speed + " MPH";
 
+            //Set latitude and longitude to be used in UV query.
             let lat = response.coord.lat;
             let lon = response.coord.lon;
             let UVQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
@@ -62,7 +66,7 @@ function initPage() {
                 currentUVElement.append(UVIndex);
             });
 
-//  Using saved city name, execute a 5-day forecast get request from open weather map api
+//  Using saved city id, execute a 5-day forecast get request from open weather map api
             let cityID = response.id;
             let forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + cityID + "&appid=" + APIKey;
 
@@ -89,7 +93,7 @@ function initPage() {
                     forecastWeatherEl.setAttribute("alt",response.list[forecastIndex].weather[0].description);
                     forecastEls[i].append(forecastWeatherEl);
                     const forecastTempEl = document.createElement("p");
-                    forecastTempEl.innerHTML = "Temp: " + convertKelvin(response.list[forecastIndex].main.temp) + " &#176F";
+                    forecastTempEl.innerHTML = "Temp: " + convertKelvin(response.list[forecastIndex].main.temp) + " \xB0F";
                     forecastEls[i].append(forecastTempEl);
                     const forecastHumidityEl = document.createElement("p");
                     forecastHumidityEl.innerHTML = "Humidity: " + response.list[forecastIndex].main.humidity + "%";
@@ -99,12 +103,19 @@ function initPage() {
         });  
     }
 
+    //  When search button is clicked, read the city name typed by the user
     searchElement.addEventListener("click",function() {
         const searchTerm = inputElement.value;
+
+        // If user had clicked without putting a name, just do nothing.
         if (searchTerm === "") {
             return;
         }
+
+        // Call APIs to get the weather clientInformation.
         getWeather(searchTerm);
+
+        // Check to see if name is already entered.  We want to have unique names.
         let storeSearch = true;
         for (i=0; i<searchHistory.length; i++) {
             if (searchTerm === searchHistory[i]) {
@@ -115,25 +126,33 @@ function initPage() {
         if (storeSearch) {
             searchHistory.push(searchTerm);
             localStorage.setItem("search",JSON.stringify(searchHistory));
+            document.getElementById("cityInputElement").value = '';
         }
 
+        // Display search list
         renderButton();
     })
 
+    //Clear Button to clear what is in local Storage
     clearElement.addEventListener("click",function() {
         searchHistory = [];
-        renderButton();
+        localStorage.clear();
+        location.reload();
     })
 
+    // Data is in Kelvin.  We want to convert to Faranheit.
     function convertKelvin(K) {
         return Math.floor((K - 273.15) * 1.8 +32);
     }
 
+    // Format the Search History side
+    
+    //  Save user's search requests and display them underneath search form
+    //  When page loads, automatically generate current conditions and 5-day forecast for the last city the user searched for
     function renderButton() {
         historyElement.innerHTML = "";
         for (let i=0; i<searchHistory.length; i++) {
             const historyItem = document.createElement("input");
-            // <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"></input>
             historyItem.setAttribute("type","text");
             historyItem.setAttribute("readonly",true);
             historyItem.setAttribute("class", "form-control d-block bg-white");

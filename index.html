@@ -17,13 +17,13 @@
     <div style="background:transparent !important" class="jumbotron">
         <div class="container">
             <div class="row">
+                <!--Setup Search side of the page.  Input area, Search button and Clear button -->
                 <div class="col-4 bg-light">
                     <p class="search-header my-1">Search for a city</p>
                     <div class="input-group mb-3">
                         <input id="cityInputElement" type="text" class="form-control" placeholder="Enter city name" aria-label="Enter city name">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="button" id="searchButton">
-                            <!-- <button id ="add-city" class="btn btn-outline-secondary bg-primary" type="button"><ion-icon name="search-outline"></ion-icon> </button> -->
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -32,6 +32,7 @@
                     <form id="history"></form>
                 </div>
 
+                <!-- Setup current conditions portion of the page -->
                 <div class="col-8">
                     <div class="row mr-0">
                         <div class="col-12 border border-dark m-3 rounded">
@@ -70,6 +71,7 @@
                         </div>
                     </div>
 
+                    <!-- Area for 5 day forcast -->
                     <div class="row">
                         <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>
                         <div class="col forecast bg-primary text-white ml-3 mb-3 rounded"></div>

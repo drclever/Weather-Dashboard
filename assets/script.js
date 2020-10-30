@@ -24,7 +24,7 @@ function initPage() {
         let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
         $.ajax({
             url: queryURL,
-            method: "GET"
+            method: "GET",
           }).then(function(response) {
         //  Parse response to display current conditions
         //  Method for using "date" objects obtained from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
@@ -33,9 +33,23 @@ function initPage() {
             const month = currentDate.getMonth() + 1;
             const year = currentDate.getFullYear();
             nameElement.innerHTML = response.name + " (" + month + "/" + day + "/" + year + ") ";
-            let weatherPic = response.weather[0].icon;
-            currentPicElement.setAttribute("src","https://openweathermap.org/img/wn/" + weatherPic + "@2x.png");
-            currentPicElement.setAttribute("alt",response.weather[0].description);
+
+            //Determine Icon
+            let skyconditions = response.weather[0].main;
+            let queryicon="";
+            if(skyconditions==="Clouds"){
+                queryicon="https://img.icons8.com/color/48/000000/cloud.png";
+            } else if(skyconditions==="Clear"){
+                queryicon="https://img.icons8.com/color/48/000000/summer.png";
+            }else if(skyconditions==="Rain"){
+                queryicon="https://img.icons8.com/color/48/000000/rain.png";
+            }
+
+            currentPicElement.setAttribute("src",queryicon);
+            currentPicElement.setAttribute("alt",skyconditions);
+
+/*             currentPicElement.setAttribute("src","https://openweathermap.org/img/wn/" + weatherPic + "@2x.png");
+            currentPicElement.setAttribute("alt",response.weather[0].description); */
             currentTempEl.innerHTML = "Temperature: " + convertKelvin(response.main.temp) + " \xB0F";
             currentHumidityEl.innerHTML = "Humidity: " + response.main.humidity + "%";
             currentWindEl.innerHTML = "Wind Speed: " + response.wind.speed + " MPH";
@@ -79,7 +93,7 @@ function initPage() {
                 const forecastEls = document.querySelectorAll(".forecast");
                 for (i=0; i<forecastEls.length; i++) {
                     forecastEls[i].innerHTML = "";
-                    const forecastIndex = i * 8 + 1;
+                    const forecastIndex = i * 8 + 4;
                     const forecastDate = new Date(response.list[forecastIndex].dt * 1000);
                     const forecastDay = forecastDate.getDate();
                     const forecastMonth = forecastDate.getMonth() + 1;
@@ -89,8 +103,21 @@ function initPage() {
                     forecastDateEl.innerHTML = forecastMonth + "/" + forecastDay + "/" + forecastYear;
                     forecastEls[i].append(forecastDateEl);
                     const forecastWeatherEl = document.createElement("img");
-                    forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/" + response.list[forecastIndex].weather[0].icon + "@2x.png");
-                    forecastWeatherEl.setAttribute("alt",response.list[forecastIndex].weather[0].description);
+/*                     forecastWeatherEl.setAttribute("src","https://openweathermap.org/img/wn/" + response.list[forecastIndex].weather[0].icon + "@2x.png");
+                    forecastWeatherEl.setAttribute("alt",response.list[forecastIndex].weather[0].description); */
+                    let skyconditions = response.list[forecastIndex].weather[0].main;
+                    let queryicon="";
+                    if(skyconditions==="Clouds"){
+                        queryicon="https://img.icons8.com/color/48/000000/cloud.png";
+                    } else if(skyconditions==="Clear"){
+                        queryicon="https://img.icons8.com/color/48/000000/summer.png";
+                    }else if(skyconditions==="Rain"){
+                        queryicon="https://img.icons8.com/color/48/000000/rain.png";
+                    }
+
+                    forecastWeatherEl.setAttribute("src",queryicon);
+                    forecastWeatherEl.setAttribute("alt",skyconditions);
+
                     forecastEls[i].append(forecastWeatherEl);
                     const forecastTempEl = document.createElement("p");
                     forecastTempEl.innerHTML = "Temp: " + convertKelvin(response.list[forecastIndex].main.temp) + " \xB0F";

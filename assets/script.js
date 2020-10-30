@@ -79,7 +79,7 @@ function initPage() {
                 const forecastEls = document.querySelectorAll(".forecast");
                 for (i=0; i<forecastEls.length; i++) {
                     forecastEls[i].innerHTML = "";
-                    const forecastIndex = i * 8 + 4;
+                    const forecastIndex = i * 8 + 1;
                     const forecastDate = new Date(response.list[forecastIndex].dt * 1000);
                     const forecastDay = forecastDate.getDate();
                     const forecastMonth = forecastDate.getMonth() + 1;

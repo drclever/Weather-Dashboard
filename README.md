@@ -21,7 +21,7 @@ The application will allow the user to save previously searched city names and e
 * AJAX query request
 * [Font Awesome Icon](fontawesome.com)
 * [Visual Studio Code](code.visualstudio.com)
-* [Openweather API] (https://openweathermap.org/api)
+* [Openweather API](https://openweathermap.org/api)
 
 
 
@@ -31,3 +31,7 @@ https://drclever.github.io/Weather-Dashboard
 
 ## Weather Dashboard Image
 ![Weather-Dashboard Image](./Weather-Dashboard.PNG)
+
+
+## Weather Dashboard Icon List
+![Weather-Dashboard Icon List Image](./Weather-Dashboard-Icon-List.PNG)

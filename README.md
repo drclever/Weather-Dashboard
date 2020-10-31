@@ -32,3 +32,7 @@ https://drclever.github.io/Weather-Dashboard
 ## Weather Dashboard Image
 ![Weather-Dashboard Image](./Weather-Dashboard.PNG)
 
+
+## Weather Dashboard Icons Image
+
+![Weather-Dashboard Image](./Weather-Dashboard-Icon-List.PNG)

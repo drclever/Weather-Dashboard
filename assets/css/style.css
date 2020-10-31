@@ -8,3 +8,13 @@ header {
     font-size: xx-large;
     background-color: #2f3640;
 }
+
+/* A Media Query max-width: 960px */
+@media screen and (max-width: 960px) {
+ 
+    /* Styles for the wrapper div */
+        .container {
+            width: auto;
+            margin: 0 auto;
+        }
+}
